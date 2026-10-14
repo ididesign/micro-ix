@@ -1,4 +1,4 @@
-# micro-ix
+# Interaction Inspo
 
 A local gallery of micro interactions. Plain HTML/CSS/JS with no build step.
 
