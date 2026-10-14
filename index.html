@@ -17,6 +17,10 @@
   <header class="site-header">
     <div class="header-row">
       <div class="brand"><span class="logo" aria-hidden="true"></span>interaction inspo</div>
+      <div class="header-actions">
+      <button class="theme-toggle add-btn" id="add-btn" aria-label="Add a link" aria-expanded="false" aria-controls="add-panel">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
       <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <mask id="moon-mask">
@@ -29,6 +33,16 @@
           </g>
         </svg>
       </button>
+      <form class="add-panel" id="add-panel" hidden>
+        <label for="add-url">Add a link</label>
+        <input id="add-url" name="url" type="text" inputmode="url" placeholder="https://…" required autocomplete="off">
+        <input id="add-note" name="note" type="text" placeholder="Note (optional): what to look at" autocomplete="off">
+        <div class="add-row">
+          <span>Saved as a GitHub issue in the inbox</span>
+          <button type="submit">Send</button>
+        </div>
+      </form>
+      </div>
     </div>
     <p class="tagline">A small collection of micro interactions worth stealing.</p>  </header>
 

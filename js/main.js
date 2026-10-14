@@ -92,4 +92,38 @@
     try { localStorage.setItem('micro-ix-theme', root.dataset.theme); } catch {}
     syncThemeLabel();
   });
+
+  // Add a link: opens a pre-filled GitHub issue, which acts as the inbox.
+  // GitHub Pages is static, so the issue is where the link gets stored.
+  const REPO = 'ididesign/micro-ix';
+  const addBtn = document.getElementById('add-btn');
+  const panel = document.getElementById('add-panel');
+  const urlInput = document.getElementById('add-url');
+  const noteInput = document.getElementById('add-note');
+  const setOpen = (open) => {
+    panel.hidden = !open;
+    addBtn.setAttribute('aria-expanded', String(open));
+    if (open) urlInput.focus();
+  };
+  addBtn.addEventListener('click', () => setOpen(panel.hidden));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden) { setOpen(false); addBtn.focus(); } });
+  document.addEventListener('pointerdown', (e) => {
+    if (!panel.hidden && !panel.contains(e.target) && !addBtn.contains(e.target)) setOpen(false);
+  });
+  panel.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let url = urlInput.value.trim();
+    if (!/^https?:\/\//i.test(url)) url = `https://${url}`;
+    let host = url;
+    try { host = new URL(url).hostname.replace(/^www\./, ''); } catch {}
+    const note = noteInput.value.trim();
+    const params = new URLSearchParams({
+      title: `Add: ${host}`,
+      body: `${url}${note ? `\n\n${note}` : ''}`,
+      labels: 'inbox',
+    });
+    window.open(`https://github.com/${REPO}/issues/new?${params}`, '_blank', 'noopener');
+    panel.reset();
+    setOpen(false);
+  });
 })();
