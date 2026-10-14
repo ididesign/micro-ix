@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>micro-ix</title>
+  <script>
+    // Set the theme before first paint to avoid a flash. Dark by default.
+    try { document.documentElement.dataset.theme = localStorage.getItem('micro-ix-theme') || 'dark'; }
+    catch { document.documentElement.dataset.theme = 'dark'; }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-row">
+      <div class="brand"><span class="logo" aria-hidden="true"></span>micro-ix</div>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <mask id="moon-mask">
+            <rect x="-4" y="-4" width="32" height="32" fill="#fff"/>
+            <circle class="mask-dot" cx="30" cy="-6" r="6" fill="#000"/>
+          </mask>
+          <circle class="sun" cx="12" cy="12" r="5" fill="currentColor" mask="url(#moon-mask)"/>
+          <g class="rays" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M12 1.5v2M12 20.5v2M1.5 12h2M20.5 12h2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M4.6 19.4l1.4-1.4M18 6l1.4-1.4"/>
+          </g>
+        </svg>
+      </button>
+    </div>
+    <p class="tagline">A small collection of micro interactions worth stealing.</p>  </header>
+
+  <main class="grid" id="grid"></main>
+
+  <footer class="site-footer">
+    <span id="count"></span> interactions · add more in <code>interactions/</code>
+  </footer>
+
+  <script src="js/registry.js"></script>
+  <!-- Interactions: one file each, rendered in this order -->
+  <script src="interactions/pool-import.js"></script>
+  <script src="interactions/ask-carousel.js"></script>
+  <script src="interactions/drift-canvas.js"></script>
+  <script src="interactions/crt-tv.js"></script>
+  <script src="interactions/project-wheel.js"></script>
+  <script src="interactions/drone-formation.js"></script>
+  <script src="interactions/shape-cloud.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
