@@ -303,7 +303,7 @@ MicroIX.register({
     root.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { mode === 'ring' ? focusOn(active) : goTo(active + 1); }
       else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { mode === 'ring' ? focusOn(active) : goTo(active - 1); }
-      else if (e.key === 'Escape') { root.classList.contains('open') ? toggleOpen() : setMode('ring'); }
+      else if (e.key === 'Escape' && (root.classList.contains('open') || mode !== 'ring')) { root.classList.contains('open') ? toggleOpen() : setMode('ring'); }
       else return;
       e.preventDefault();
       wake();
