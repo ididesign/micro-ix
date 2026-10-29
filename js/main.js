@@ -1,6 +1,15 @@
 (() => {
   const grid = document.getElementById('grid');
-  const items = window.MicroIX.items;
+  // Spread phone demos evenly through the grid so they never cluster side by side
+  const items = (() => {
+    const all = window.MicroIX.items;
+    const phones = all.filter((it) => it.layout?.device);
+    const rest = all.filter((it) => !it.layout?.device);
+    phones.forEach((p, k) => {
+      rest.splice(Math.floor(((k + 0.5) * all.length) / phones.length), 0, p);
+    });
+    return rest;
+  })();
   const DESIGN_W = 820; // width wide demos are laid out at before scaling into a column
   const MIN_COL = 300;
   const DEVICE_SCALE = 0.7;
