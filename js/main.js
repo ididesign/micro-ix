@@ -3,6 +3,7 @@
   const items = window.MicroIX.items;
   const DESIGN_W = 820; // width wide demos are laid out at before scaling into a column
   const MIN_COL = 300;
+  const DEVICE_SCALE = 0.7;
   const GAP = 16;
   const cards = [];
 
@@ -74,7 +75,8 @@
     if (!w) return;
     if (layout.device) {
       const { width: DW, height: DH } = layout.device;
-      const s = Math.min(1, w / DW);
+      // Phones sit smaller in the grid (with air on either side) so tall tiles don't dominate
+      const s = Math.min(cols === 1 ? 1 : DEVICE_SCALE, w / DW);
       Object.assign(box.style, { width: `${DW * s}px`, height: `${DH * s}px` });
       Object.assign(screen.style, { width: `${DW}px`, height: `${DH}px`, transform: `scale(${s})` });
       stage.style.height = `${DH * s}px`;
