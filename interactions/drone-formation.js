@@ -207,10 +207,11 @@ MicroIX.register({
       drones.forEach((el) => {
         const r = el.getBoundingClientRect();
         const s = scene.getBoundingClientRect();
+        const z = s.width / scene.offsetWidth || 1; // the card may be scaled down
         const ring = document.createElement('span');
         ring.className = 'ring';
-        ring.style.left = `${r.left + r.width / 2 - s.left}px`;
-        ring.style.top = `${r.top + r.height / 2 - s.top}px`;
+        ring.style.left = `${(r.left + r.width / 2 - s.left) / z}px`;
+        ring.style.top = `${(r.top + r.height / 2 - s.top) / z}px`;
         ring.addEventListener('animationend', () => ring.remove());
         scene.append(ring);
       });

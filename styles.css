@@ -36,7 +36,7 @@ body {
 }
 
 /* Header */
-.site-header { max-width: 1200px; margin: 0 auto; padding: 56px 24px 24px; }
+.site-header { max-width: 1680px; margin: 0 auto; padding: 56px 24px 24px; }
 .brand { display: flex; align-items: center; gap: 10px; font-size: 28px; font-weight: 700; letter-spacing: -.02em; }
 .logo { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); animation: logo-pulse 2.4s var(--ease-out) infinite; }
 @keyframes logo-pulse {
@@ -86,27 +86,25 @@ body {
 .chip:active { transform: scale(.96); }
 .chip[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
 
-/* Grid */
+/* Grid: Pinterest-style masonry. main.js fills .col columns, each card going into
+   the shortest one, so landscape and portrait tiles pack with no gaps. */
 .grid {
-  max-width: 1200px;
+  max-width: 1680px;
   margin: 0 auto;
   padding: 8px 24px 48px;
-  /* Flex-wrap rather than grid: cards in a row always stretch to fill it, so
-     there are no empty columns even when a wide card sits below. */
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  align-items: flex-start;
+  gap: 16px;
 }
-.grid > .card { flex: 1 1 320px; min-width: 0; }
-.grid > .card.wide { flex-basis: 100%; }
+.col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
 .card {
   display: flex;
   flex-direction: column;
   overflow: hidden;
   /* Grey frame around each demo, like landing.love */
-  padding: 14px;
+  padding: 10px;
   background: var(--frame);
-  border-radius: 24px;
+  border-radius: 22px;
   animation: card-in .5s var(--ease-out) both;
   animation-delay: calc(var(--i, 0) * 40ms);
 }
@@ -114,20 +112,20 @@ body {
 @keyframes card-in { from { opacity: 0; transform: translateY(8px); } }
 
 /* Demo sits inside the grey frame with its own rounded corners */
-.stage { position: relative; height: 240px; display: grid; place-items: center; overflow: hidden; border-radius: 14px; background: var(--stage); }
+.stage { position: relative; overflow: hidden; border-radius: 14px; background: var(--stage); }
+.stage-screen { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
 .stage.device { display: flex; justify-content: center; overflow: visible; background: none; }
 .device-box { position: relative; overflow: hidden; border-radius: 30px; box-shadow: 0 0 0 1px rgba(0,0,0,.06), 0 14px 32px -18px rgba(0,0,0,.45); }
-.device-screen { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
-.card-body { padding: 14px 4px 2px; }
+.card-body { padding: 10px 4px 2px; }
 .card-title { margin: 0; font-size: 15px; font-weight: 600; }
-.card-desc { margin: 4px 0 12px; color: var(--muted); font-size: 13.5px; }
+.card-desc { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin: 2px 0 10px; color: var(--muted); font-size: 13px; line-height: 1.4; }
 .card-meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
 .card-meta a { color: var(--muted); }
 .card-meta a:hover { color: var(--text); }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .tag { padding: 2px 8px; border-radius: 999px; background: var(--surface); }
 
-.site-footer { max-width: 1200px; margin: 0 auto; padding: 0 24px 48px; color: var(--muted); font-size: 13px; }
+.site-footer { max-width: 1680px; margin: 0 auto; padding: 0 24px 48px; color: var(--muted); font-size: 13px; }
 code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -139,7 +137,6 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
   .site-header { padding: 28px 16px 16px; }
   .brand { font-size: 24px; }
   .tagline { margin-bottom: 4px; }
-  .grid { padding: 8px 16px 32px; gap: 16px; }
+  .grid { padding: 8px 16px 32px; }
   .site-footer { padding: 0 16px 32px; }
-  .card.wide .stage { height: min(var(--stage-h, 560px), 75vh) !important; }
 }

@@ -160,8 +160,9 @@ MicroIX.register({
     });
     root.addEventListener('pointermove', (e) => {
       const r = root.getBoundingClientRect();
-      fpos.tx = e.clientX - r.left;
-      fpos.ty = e.clientY - r.top;
+      const z = r.width / root.offsetWidth || 1; // the card may be scaled down
+      fpos.tx = (e.clientX - r.left) / z;
+      fpos.ty = (e.clientY - r.top) / z;
       mouse.x = fpos.tx / W;
       mouse.y = fpos.ty / H;
       if (!last || gathered) return;

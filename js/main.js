@@ -1,6 +1,10 @@
 (() => {
   const grid = document.getElementById('grid');
   const items = window.MicroIX.items;
+  const DESIGN_W = 820; // width wide demos are laid out at before scaling into a column
+  const MIN_COL = 300;
+  const GAP = 16;
+  const cards = [];
 
   // Each interaction ships its own CSS; inject it all once.
   const style = document.createElement('style');
@@ -41,44 +45,78 @@
     }
 
     // Optional per-interaction layout:
-    //   { wide: true, stageHeight: 700 }          full-width card, fixed stage height
-    //   { device: { width: 320, height: 660 } }   phone screen that fills the card edge to edge
+    //   { wide: true, stageHeight: 700 }          landscape demo, designed at DESIGN_W × stageHeight
+    //   { device: { width: 320, height: 660 } }   phone screen at its real portrait size
+    // In the masonry grid each demo renders at its natural size and is scaled down as one
+    // piece, like a thumbnail, so narrow columns never squash a layout. On a phone (one
+    // column) wide demos render natively at full width instead.
     const stage = card.querySelector('.stage');
-    if (item.layout?.wide) card.classList.add('wide');
-    if (item.layout?.stageHeight) {
-      stage.style.height = `${item.layout.stageHeight}px`;
-      stage.style.setProperty('--stage-h', `${item.layout.stageHeight}px`);
-    }
-
-    grid.append(card);
-
+    const screen = document.createElement('div');
+    screen.className = 'stage-screen';
+    let box = null;
     if (item.layout?.device) {
-      // Phone UI keeps its real proportions: centred in the grey frame, never stretched,
-      // and only scaled down (uniformly) when the card is narrower than the device.
-      const { width: DW, height: DH } = item.layout.device;
-      const box = document.createElement('div');
+      box = document.createElement('div');
       box.className = 'device-box';
-      const screen = document.createElement('div');
-      screen.className = 'device-screen';
-      screen.style.width = `${DW}px`;
-      screen.style.height = `${DH}px`;
       box.append(screen);
       stage.classList.add('device');
       stage.append(box);
-      const fit = () => {
-        const s = Math.min(1, stage.clientWidth / DW);
-        box.style.width = `${DW * s}px`;
-        box.style.height = `${DH * s}px`;
-        screen.style.transform = `scale(${s})`;
-        stage.style.height = `${DH * s}px`;
-      };
-      fit();
-      new ResizeObserver(fit).observe(stage);
-      item.mount(screen);
     } else {
-      item.mount(stage);
+      stage.append(screen);
     }
+    cards.push({ card, stage, screen, box, layout: item.layout || {} });
+    grid.append(card);
+    item.mount(screen);
   });
+
+  // ---------- fit each demo into its column ----------
+  const fit = ({ stage, screen, box, layout }) => {
+    const w = stage.clientWidth;
+    if (!w) return;
+    if (layout.device) {
+      const { width: DW, height: DH } = layout.device;
+      const s = Math.min(1, w / DW);
+      Object.assign(box.style, { width: `${DW * s}px`, height: `${DH * s}px` });
+      Object.assign(screen.style, { width: `${DW}px`, height: `${DH}px`, transform: `scale(${s})` });
+      stage.style.height = `${DH * s}px`;
+      return;
+    }
+    const NH = layout.stageHeight || 480;
+    if (cols === 1) {
+      const h = Math.min(NH, window.innerHeight * 0.75);
+      Object.assign(screen.style, { width: '100%', height: `${h}px`, transform: '' });
+      stage.style.height = `${h}px`;
+      return;
+    }
+    const s = w / DESIGN_W;
+    Object.assign(screen.style, { width: `${DESIGN_W}px`, height: `${NH}px`, transform: `scale(${s})` });
+    stage.style.height = `${NH * s}px`;
+  };
+
+  // ---------- masonry: each card drops into the shortest column, in order ----------
+  let cols = 0;
+  const masonry = () => {
+    const css = getComputedStyle(grid);
+    const inner = grid.clientWidth - parseFloat(css.paddingLeft) - parseFloat(css.paddingRight);
+    const n = Math.max(1, Math.floor((inner + GAP) / (MIN_COL + GAP)));
+    if (n !== cols) {
+      cols = n;
+      const columns = Array.from({ length: n }, () => {
+        const c = document.createElement('div');
+        c.className = 'col';
+        return c;
+      });
+      grid.replaceChildren(...columns);
+      cards.forEach((c) => {
+        const shortest = columns.reduce((a, b) => (b.offsetHeight < a.offsetHeight ? b : a));
+        shortest.append(c.card);
+        fit(c);
+      });
+    } else {
+      cards.forEach(fit);
+    }
+  };
+  masonry();
+  new ResizeObserver(masonry).observe(grid);
 
   document.getElementById('count').textContent = items.length;
 

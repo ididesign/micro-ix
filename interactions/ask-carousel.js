@@ -173,7 +173,8 @@ MicroIX.register({
         if (!dragged && Math.abs(dx) < 6) return;
         dragged = true;
         track.classList.add('dragging');
-        dragX = dx * 0.6;
+        // Divide by the card's thumbnail scale so the slide tracks the finger
+        dragX = (dx * 0.6) / (viewport.getBoundingClientRect().width / viewport.offsetWidth || 1);
         layout();
       };
       const up = (ev) => {

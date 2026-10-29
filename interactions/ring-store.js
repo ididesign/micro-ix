@@ -253,7 +253,8 @@ MicroIX.register({
     });
     root.addEventListener('pointermove', (e) => {
       if (!dragging) return;
-      const dx = e.clientX - last[0], dy = e.clientY - last[1];
+      const z = root.getBoundingClientRect().width / root.offsetWidth || 1; // the card may be scaled down
+      const dx = (e.clientX - last[0]) / z, dy = (e.clientY - last[1]) / z;
       last = [e.clientX, e.clientY];
       moved += Math.abs(dx) + Math.abs(dy);
       if (moved > 6 && !root.hasPointerCapture(e.pointerId)) root.setPointerCapture(e.pointerId);
@@ -262,8 +263,9 @@ MicroIX.register({
       else {
         // Spin by the angle swept around the ring centre
         const r = root.getBoundingClientRect();
+        const z = r.width / root.offsetWidth || 1; // the card may be scaled down
         const G = geom(0);
-        const px = e.clientX - r.left - G.cx, py = e.clientY - r.top - G.cy;
+        const px = (e.clientX - r.left) / z - G.cx, py = (e.clientY - r.top) / z - G.cy;
         const cross = (px * dy - py * dx) / Math.max(1, px * px + py * py);
         rotT -= cross / G.step;
       }
@@ -325,8 +327,9 @@ MicroIX.register({
       fly.className = 'fly';
       fly.innerHTML = art(P[active]);
       root.append(fly);
-      const x0 = a.left + a.width / 2 - rr.left, y0 = a.top + a.height / 2 - rr.top;
-      const x1 = b.left + b.width / 2 - rr.left, y1 = b.top + b.height / 2 - rr.top;
+      const z = rr.width / root.offsetWidth || 1; // the card may be scaled down
+      const x0 = (a.left + a.width / 2 - rr.left) / z, y0 = (a.top + a.height / 2 - rr.top) / z;
+      const x1 = (b.left + b.width / 2 - rr.left) / z, y1 = (b.top + b.height / 2 - rr.top) / z;
       fly.animate([
         { transform: `translate(${x0}px, ${y0}px) scale(1.6)`, opacity: 1 },
         { transform: `translate(${(x0 + x1) / 2}px, ${Math.min(y0, y1) - 60}px) scale(.9)`, opacity: 1, offset: 0.55 },

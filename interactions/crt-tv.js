@@ -211,8 +211,11 @@ MicroIX.register({
       root.classList.toggle('zoomed', on);
       if (!on) { scene.style.transform = ''; return; }
       scene.style.transform = '';
-      const r = root.getBoundingClientRect();
-      const s = screen.getBoundingClientRect();
+      // Rects are in screen px; the card may be scaled down, so convert to layout px
+      const z = root.getBoundingClientRect().width / root.offsetWidth || 1;
+      const un = (b) => ({ left: b.left / z, top: b.top / z, width: b.width / z, height: b.height / z });
+      const r = un(root.getBoundingClientRect());
+      const s = un(screen.getBoundingClientRect());
       const cx = s.left + s.width / 2 - r.left;
       const cy = s.top + s.height / 2 - r.top;
       const k = Math.min((r.height * 0.84) / s.height, (r.width * 0.8) / s.width);
