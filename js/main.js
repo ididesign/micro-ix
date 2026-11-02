@@ -75,6 +75,7 @@
       box.className = 'device-box';
       box.append(screen);
       stage.classList.add('device');
+      card.classList.add('is-device');
       stage.append(box);
     } else {
       stage.append(screen);
@@ -131,7 +132,9 @@
       });
       grid.replaceChildren(...columns);
       cards.forEach((c) => {
-        const shortest = columns.reduce((a, b) => (b.offsetHeight < a.offsetHeight ? b : a));
+        // A phone never lands straight under another phone
+        const ok = c.layout.device && n > 1 ? columns.filter((col) => !col.lastElementChild?.classList.contains('is-device')) : columns;
+        const shortest = (ok.length ? ok : columns).reduce((a, b) => (b.offsetHeight < a.offsetHeight ? b : a));
         shortest.append(c.card);
         fit(c);
       });
