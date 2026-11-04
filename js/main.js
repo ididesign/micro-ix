@@ -83,8 +83,10 @@
     const c = { item, card, stage, screen, box, layout: item.layout || {} };
     cards.push(c);
     // The demo itself stays interactive in the tile; the text area and expand button open the viewer
-    card.querySelector('.card-body').addEventListener('click', (e) => {
-      if (!e.target.closest('a')) openViewer(c);
+    // On phones the whole tile is a preview (the demo ignores touch so it can't trap scrolling)
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return;
+      if (grid.classList.contains('compact') || e.target.closest('.card-body')) openViewer(c);
     });
     grid.append(card);
     item.mount(screen);
@@ -99,7 +101,7 @@
     if (layout.device) {
       const { width: DW, height: DH } = layout.device;
       // Phones sit smaller in the grid (with air on either side) so tall tiles don't dominate
-      const s = Math.min(cols === 1 ? 1 : DEVICE_SCALE, w / DW);
+      const s = Math.min(cols === 1 || compact ? 1 : DEVICE_SCALE, w / DW);
       Object.assign(box.style, { width: `${DW * s}px`, height: `${DH * s}px` });
       Object.assign(screen.style, { width: `${DW}px`, height: `${DH}px`, transform: `scale(${s})` });
       stage.style.height = `${DH * s}px`;
@@ -119,10 +121,14 @@
 
   // ---------- masonry: each card drops into the shortest column, in order ----------
   let cols = 0;
+  let compact = false;
   const masonry = () => {
     const css = getComputedStyle(grid);
     const inner = grid.clientWidth - parseFloat(css.paddingLeft) - parseFloat(css.paddingRight);
-    const n = Math.max(1, Math.floor((inner + GAP) / (MIN_COL + GAP)));
+    // Phones get two columns of small tap-to-open previews instead of one column of live demos
+    compact = inner < MIN_COL * 2 + GAP;
+    grid.classList.toggle('compact', compact);
+    const n = compact ? 2 : Math.max(1, Math.floor((inner + GAP) / (MIN_COL + GAP)));
     if (n !== cols) {
       cols = n;
       const columns = Array.from({ length: n }, () => {
@@ -250,9 +256,9 @@
     syncThemeLabel();
   });
 
-  // Add a link: opens a pre-filled GitHub issue, which acts as the inbox.
-  // GitHub Pages is static, so the issue is where the link gets stored.
-  const REPO = 'ididesign/micro-ix';
+  // Add a link: posted to a small relay (worker/) that files it as a GitHub issue,
+  // which acts as the inbox. Visitors don't need a GitHub account.
+  const INBOX_URL = 'https://micro-ix-inbox.WORKERS_SUBDOMAIN.workers.dev';
   const addBtn = document.getElementById('add-btn');
   const panel = document.getElementById('add-panel');
   const urlInput = document.getElementById('add-url');
@@ -267,20 +273,40 @@
   document.addEventListener('pointerdown', (e) => {
     if (!panel.hidden && !panel.contains(e.target) && !addBtn.contains(e.target)) setOpen(false);
   });
-  panel.addEventListener('submit', (e) => {
+  const statusEl = document.getElementById('add-status');
+  const sendBtn = panel.querySelector('button[type="submit"]');
+  panel.addEventListener('submit', async (e) => {
     e.preventDefault();
-    let url = urlInput.value.trim();
-    if (!/^https?:\/\//i.test(url)) url = `https://${url}`;
-    let host = url;
-    try { host = new URL(url).hostname.replace(/^www\./, ''); } catch {}
-    const note = noteInput.value.trim();
-    const params = new URLSearchParams({
-      title: `Add: ${host}`,
-      body: `${url}${note ? `\n\n${note}` : ''}`,
-      labels: 'inbox',
-    });
-    window.open(`https://github.com/${REPO}/issues/new?${params}`, '_blank', 'noopener');
-    panel.reset();
-    setOpen(false);
+    if (INBOX_URL.includes('WORKERS_SUBDOMAIN')) {
+      // Relay not deployed yet: fall back to a pre-filled GitHub issue
+      let url = urlInput.value.trim();
+      if (!/^https?:\/\//i.test(url)) url = `https://${url}`;
+      let host = url;
+      try { host = new URL(url).hostname.replace(/^www\./, ''); } catch {}
+      const note = noteInput.value.trim();
+      const params = new URLSearchParams({ title: `Add: ${host}`, body: `${url}${note ? `\n\n${note}` : ''}`, labels: 'inbox' });
+      window.open(`https://github.com/ididesign/micro-ix/issues/new?${params}`, '_blank', 'noopener');
+      panel.reset();
+      setOpen(false);
+      return;
+    }
+    sendBtn.disabled = true;
+    statusEl.textContent = 'Sending…';
+    try {
+      const res = await fetch(INBOX_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: urlInput.value, note: noteInput.value, website: panel.elements.website.value }),
+      });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(out.error || 'Couldn’t send it, try again');
+      panel.reset();
+      statusEl.textContent = 'Sent, thanks!';
+      setTimeout(() => { setOpen(false); statusEl.textContent = 'Goes straight to the inbox'; }, 1400);
+    } catch (err) {
+      statusEl.textContent = err.message === 'Failed to fetch' ? 'Couldn’t reach the inbox, try again' : err.message;
+    } finally {
+      sendBtn.disabled = false;
+    }
   });
 })();

@@ -37,8 +37,9 @@
         <label for="add-url">Add a link</label>
         <input id="add-url" name="url" type="text" inputmode="url" placeholder="https://…" required autocomplete="off">
         <input id="add-note" name="note" type="text" placeholder="Note (optional): what to look at" autocomplete="off">
+        <input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
         <div class="add-row">
-          <span>Saved as a GitHub issue in the inbox</span>
+          <span id="add-status" aria-live="polite">Goes straight to the inbox</span>
           <button type="submit">Send</button>
         </div>
       </form>
@@ -69,6 +70,7 @@
   <script src="interactions/merch-rack.js"></script>
   <script src="interactions/globe-dive.js"></script>
   <script src="interactions/postcard-rack.js"></script>
+  <script src="interactions/crumbo-calendar.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
