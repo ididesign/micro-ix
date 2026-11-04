@@ -83,10 +83,9 @@
     const c = { item, card, stage, screen, box, layout: item.layout || {} };
     cards.push(c);
     // The demo itself stays interactive in the tile; the text area and expand button open the viewer
-    // On phones the whole tile is a preview (the demo ignores touch so it can't trap scrolling)
-    card.addEventListener('click', (e) => {
-      if (e.target.closest('a')) return;
-      if (grid.classList.contains('compact') || e.target.closest('.card-body')) openViewer(c);
+    // The demo itself stays interactive in the tile; the text area and expand button open the viewer
+    card.querySelector('.card-body').addEventListener('click', (e) => {
+      if (!e.target.closest('a')) openViewer(c);
     });
     grid.append(card);
     item.mount(screen);

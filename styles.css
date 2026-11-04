@@ -165,11 +165,11 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
   .viewer-close { top: 10px; right: 10px; }
 }
 
-/* Two-column previews on phones: tap a tile to open the live demo */
+/* Two-column previews on phones; the demos stay live, the title row opens the viewer */
 .grid.compact { gap: 10px; padding-left: 12px; padding-right: 12px; }
 .grid.compact .col { gap: 10px; }
-.grid.compact .card { padding: 6px; border-radius: 16px; cursor: pointer; }
-.grid.compact .stage { border-radius: 11px; pointer-events: none; }
+.grid.compact .card { padding: 6px; border-radius: 16px; }
+.grid.compact .stage { border-radius: 11px; }
 .grid.compact .device-box { border-radius: 16px; }
 .grid.compact .card-body { padding: 7px 3px 1px; }
 .grid.compact .card-title { font-size: 12.5px; line-height: 1.3; }
