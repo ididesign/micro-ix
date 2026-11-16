@@ -11,7 +11,7 @@ MicroIX.register({
 .ix-merch .top { position: absolute; top: 18px; left: 26px; right: 26px; display: flex; justify-content: space-between; align-items: center; font-size: 10px; letter-spacing: .14em; transition: opacity .4s; }
 .ix-merch .top button { all: unset; cursor: pointer; padding: 4px 0; }
 .ix-merch .logo { font: 400 25px/.82 Yellowtail, "Brush Script MT", cursive; text-align: center; letter-spacing: 0; rotate: -6deg; }
-.ix-merch .close { all: unset; cursor: pointer; position: absolute; top: 18px; right: 26px; font-size: 10px; letter-spacing: .14em; opacity: 0; pointer-events: none; transition: opacity .3s; }
+.ix-merch .close { all: unset; cursor: pointer; position: absolute; top: 18px; right: 26px; z-index: 3; font-size: 10px; letter-spacing: .14em; opacity: 0; pointer-events: none; transition: opacity .3s; }
 .ix-merch .close:hover, .ix-merch .top button:hover { text-decoration: underline; text-underline-offset: 3px; }
 
 /* The rail */
@@ -248,6 +248,8 @@ MicroIX.register({
     root.querySelector('.prev').addEventListener('click', () => show(cur - 1, -1));
     root.querySelector('.next').addEventListener('click', () => show(cur + 1, 1));
     close.addEventListener('click', shut);
+    // Clicking the empty space around the garment also puts it back
+    root.querySelector('.focus').addEventListener('click', (e) => { if (e.target === e.currentTarget) shut(); });
     root.addEventListener('keydown', (e) => {
       if (!root.classList.contains('open')) return;
       if (e.key === 'Escape') { e.preventDefault(); shut(); }
