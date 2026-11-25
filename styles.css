@@ -2,7 +2,7 @@
   --bg: #ffffff;
   --frame: #f2f2f1;
   --surface: #ffffff;
-  --stage: #efeee9;
+  --stage: #ffffff;
   --text: #1a1a1a;
   --muted: #6b6b6b;
   --line: #e3e1db;
@@ -308,3 +308,4 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
   .f-spin, .f-caret { animation: none; }
 }
 .panel-bar > * { pointer-events: auto; }
+:root:not([data-theme="dark"]) .f-stage { --surface: #f4f4f2; }
