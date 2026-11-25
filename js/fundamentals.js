@@ -18,6 +18,10 @@
       if (on) { placePill(t); if (focus) t.focus(); }
     });
     Object.entries(panels).forEach(([k, p]) => { p.hidden = k !== name; });
+    // The add button belongs to Inspiration; the theme switch stays on both tabs.
+    const add = document.getElementById('add-btn');
+    add.hidden = name !== 'inspo';
+    if (add.hidden && add.getAttribute('aria-expanded') === 'true') add.click();
     if (name === 'fundamentals') {
       build();
       if (location.hash) history.replaceState(null, '', location.pathname + location.search);

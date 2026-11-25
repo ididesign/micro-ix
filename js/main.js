@@ -239,7 +239,7 @@
   masonry();
   new ResizeObserver(masonry).observe(grid);
 
-  // Wait a frame so the tab script can reveal the Inspo panel before we measure cards.
+  // Wait a frame so the tab script can reveal the Inspiration panel before we measure cards.
   const deep = cards.find((c) => `#${c.item.id}` === location.hash);
   if (deep) requestAnimationFrame(() => { masonry(); openViewer(deep); });
 

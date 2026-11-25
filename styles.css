@@ -46,7 +46,8 @@ body {
 .tagline { margin: 0; color: var(--muted); }
 
 /* Tabs: a pill slides under the selected tab */
-.tabs { position: relative; display: inline-flex; margin-top: 22px; padding: 4px; border: 1px solid var(--line); border-radius: 999px; background: var(--frame); }
+.tabs-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 22px; }
+.tabs { position: relative; display: inline-flex; padding: 4px; border: 1px solid var(--line); border-radius: 999px; background: var(--frame); }
 .tab { position: relative; z-index: 1; padding: 8px 18px; border: 0; border-radius: 999px; background: none; color: var(--muted); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; transition: color .25s var(--ease-out); }
 .tab[aria-selected="true"] { color: var(--text); }
 .tab { display: inline-flex; align-items: center; gap: 7px; }
@@ -55,7 +56,6 @@ body {
 .tab:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
 .tab-pill { position: absolute; left: 0; top: 4px; bottom: 4px; border-radius: 999px; background: var(--surface); box-shadow: 0 1px 2px rgba(0,0,0,.12), 0 0 0 1px var(--line); transition: transform .4s var(--ease-spring), width .4s var(--ease-spring); }
 .panel[hidden] { display: none; }
-.panel-bar { max-width: 1680px; margin: 0 auto; padding: 0 24px 22px; margin-top: -65px; pointer-events: none; display: flex; justify-content: flex-end; align-items: center; gap: 16px; }
 .header-row { display: flex; justify-content: space-between; align-items: center; }
 
 /* Theme toggle: sun ⇄ moon morph. The mask circle slides in to carve the crescent. */
@@ -74,7 +74,7 @@ body {
 .add-btn svg { transition: transform .35s var(--ease-spring); }
 .add-btn[aria-expanded="true"] svg { transform: rotate(45deg); }
 .add-panel { position: absolute; z-index: 20; right: 0; top: 50px; display: grid; gap: 8px; width: min(340px, calc(100vw - 32px)); padding: 14px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: 0 20px 44px -22px rgba(0,0,0,.55); transform-origin: top right; animation: panel-in .3s var(--ease-spring); }
-.add-panel[hidden] { display: none; }
+.add-panel[hidden], .add-btn[hidden] { display: none; }
 @keyframes panel-in { from { opacity: 0; transform: scale(.94) translateY(-4px); } }
 .add-panel label { font-size: 13px; font-weight: 600; }
 .add-panel input { width: 100%; padding: 9px 11px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); font: inherit; font-size: 14px; outline: none; transition: border-color .2s; }
@@ -166,9 +166,11 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
 
 /* Phone browsers: tighter gutters so demos get the full width */
 @media (max-width: 640px) {
+  .tab { padding: 8px 11px; gap: 5px; font-size: 13px; }
+  .header-actions { gap: 6px; }
+  .header-actions .theme-toggle { width: 36px; height: 36px; }
   .site-header { padding: 28px 16px 16px; }
   .brand { font-size: 24px; }
-  .panel-bar { padding: 0 16px 16px; margin-top: -59px; }
   .f-section, .f-intro, .f-credit { padding-left: 16px !important; padding-right: 16px !important; }
   .grid { padding: 8px 16px 32px; }
   .site-footer { padding: 0 16px 32px; }
@@ -307,5 +309,4 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
   .tab-pill { transition: none; }
   .f-spin, .f-caret { animation: none; }
 }
-.panel-bar > * { pointer-events: auto; }
 :root:not([data-theme="dark"]) .f-stage { --surface: #f4f4f2; }

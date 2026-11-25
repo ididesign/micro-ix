@@ -18,15 +18,12 @@
     <div class="header-row">
       <div class="brand"><span class="logo" aria-hidden="true"></span>We can excel at the interaction</div>
     </div>
-    <div class="tabs" role="tablist" aria-label="Sections">
-      <span class="tab-pill" aria-hidden="true"></span>
-      <button class="tab" role="tab" id="tab-fundamentals" aria-controls="panel-fundamentals" aria-selected="true"><svg class="tab-ico" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 13.5C7 13.5 9 2.5 14 2.5"/><circle cx="2" cy="13.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="14" cy="2.5" r="1.2" fill="currentColor" stroke="none"/></svg>Fundamentals</button>
-      <button class="tab" role="tab" id="tab-inspo" aria-controls="panel-inspo" aria-selected="false" tabindex="-1"><svg class="tab-ico" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.8l1.5 4.2 4.3 1.5-4.3 1.5L8 13.2 6.5 9 2.2 7.5 6.5 6z"/><path d="M13 11.5v3M11.5 13h3"/></svg>Inspo</button>
-    </div>
-  </header>
-
-  <section class="panel" id="panel-inspo" role="tabpanel" aria-labelledby="tab-inspo" hidden>
-    <div class="panel-bar">
+    <div class="tabs-row">
+      <div class="tabs" role="tablist" aria-label="Sections">
+        <span class="tab-pill" aria-hidden="true"></span>
+        <button class="tab" role="tab" id="tab-fundamentals" aria-controls="panel-fundamentals" aria-selected="true"><svg class="tab-ico" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 13.5C7 13.5 9 2.5 14 2.5"/><circle cx="2" cy="13.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="14" cy="2.5" r="1.2" fill="currentColor" stroke="none"/></svg>Fundamentals</button>
+        <button class="tab" role="tab" id="tab-inspo" aria-controls="panel-inspo" aria-selected="false" tabindex="-1"><svg class="tab-ico" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 1.8l1.5 4.2 4.3 1.5-4.3 1.5L8 13.2 6.5 9 2.2 7.5 6.5 6z"/><path d="M13 11.5v3M11.5 13h3"/></svg>Inspiration</button>
+      </div>
       <div class="header-actions">
         <button class="theme-toggle add-btn" id="add-btn" aria-label="Add a link" aria-expanded="false" aria-controls="add-panel">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -55,7 +52,9 @@
         </form>
       </div>
     </div>
+  </header>
 
+  <section class="panel" id="panel-inspo" role="tabpanel" aria-labelledby="tab-inspo" hidden>
     <main class="grid" id="grid"></main>
 
     <footer class="site-footer">
