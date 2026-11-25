@@ -20,9 +20,9 @@
     Object.entries(panels).forEach(([k, p]) => { p.hidden = k !== name; });
     if (name === 'fundamentals') {
       build();
-      if (location.hash !== '#fundamentals') history.replaceState(null, '', '#fundamentals');
-    } else if (location.hash === '#fundamentals') {
-      history.replaceState(null, '', location.pathname + location.search);
+      if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    } else if (!location.hash || location.hash === '#fundamentals') {
+      history.replaceState(null, '', '#inspo');
     }
   };
   tabs.forEach((t, i) => {
@@ -35,7 +35,8 @@
     });
   });
   window.addEventListener('resize', () => placePill(tabs.find((t) => t.getAttribute('aria-selected') === 'true')));
-  window.addEventListener('hashchange', () => select(location.hash === '#fundamentals' ? 'fundamentals' : 'inspo'));
+  const tabFromHash = () => (!location.hash || location.hash === '#fundamentals' ? 'fundamentals' : 'inspo');
+  window.addEventListener('hashchange', () => select(tabFromHash()));
 
   // ---------- demo helpers ----------
   const h = (html) => { const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstElementChild; };
@@ -374,7 +375,6 @@
     if (built) return;
     built = true;
     let n = 0;
-    panel.append(h(`<div class="f-intro"><p class="tagline">The building blocks behind every interaction in Inspo: what to animate, how long, on what curve, and how to hand it off.</p></div>`));
     SECTIONS.forEach((sec) => {
       const wrap = h(`<section class="f-section"><h2 class="f-h">${sec.name}</h2><div class="f-grid"></div></section>`);
       const grid = wrap.querySelector('.f-grid');
@@ -413,7 +413,7 @@
     panel.append(h(`<p class="f-credit">Adapted from a motion design playground shown at Config 2026. Guides are tool-agnostic: the same ideas apply in any design tool or codebase.</p>`));
   }
 
-  select(location.hash === '#fundamentals' ? 'fundamentals' : 'inspo');
+  select(tabFromHash());
   // Fonts can change tab widths after first paint
   document.fonts?.ready.then(() => placePill(tabs.find((t) => t.getAttribute('aria-selected') === 'true')));
 })();

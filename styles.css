@@ -49,10 +49,13 @@ body {
 .tabs { position: relative; display: inline-flex; margin-top: 22px; padding: 4px; border: 1px solid var(--line); border-radius: 999px; background: var(--frame); }
 .tab { position: relative; z-index: 1; padding: 8px 18px; border: 0; border-radius: 999px; background: none; color: var(--muted); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; transition: color .25s var(--ease-out); }
 .tab[aria-selected="true"] { color: var(--text); }
+.tab { display: inline-flex; align-items: center; gap: 7px; }
+.tab-ico { flex: none; opacity: .85; transition: transform .4s var(--ease-spring); }
+.tab[aria-selected="true"] .tab-ico { opacity: 1; transform: scale(1.08); }
 .tab:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
 .tab-pill { position: absolute; left: 0; top: 4px; bottom: 4px; border-radius: 999px; background: var(--surface); box-shadow: 0 1px 2px rgba(0,0,0,.12), 0 0 0 1px var(--line); transition: transform .4s var(--ease-spring), width .4s var(--ease-spring); }
 .panel[hidden] { display: none; }
-.panel-bar { max-width: 1680px; margin: 0 auto; padding: 0 24px 16px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.panel-bar { max-width: 1680px; margin: 0 auto; padding: 0 24px 22px; margin-top: -65px; pointer-events: none; display: flex; justify-content: flex-end; align-items: center; gap: 16px; }
 .header-row { display: flex; justify-content: space-between; align-items: center; }
 
 /* Theme toggle: sun ⇄ moon morph. The mask circle slides in to carve the crescent. */
@@ -165,7 +168,7 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
 @media (max-width: 640px) {
   .site-header { padding: 28px 16px 16px; }
   .brand { font-size: 24px; }
-  .panel-bar { padding: 0 16px 12px; }
+  .panel-bar { padding: 0 16px 16px; margin-top: -59px; }
   .f-section, .f-intro, .f-credit { padding-left: 16px !important; padding-right: 16px !important; }
   .grid { padding: 8px 16px 32px; }
   .site-footer { padding: 0 16px 32px; }
@@ -304,3 +307,4 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
   .tab-pill { transition: none; }
   .f-spin, .f-caret { animation: none; }
 }
+.panel-bar > * { pointer-events: auto; }

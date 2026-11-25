@@ -224,7 +224,7 @@
     fit(c);
     viewer.hidden = true;
     document.documentElement.classList.remove('viewer-open');
-    history.replaceState(null, '', location.pathname + location.search);
+    history.replaceState(null, '', '#inspo');
     if (restoreFocus) (lastFocus || c.card.querySelector('.expand')).focus({ preventScroll: true });
   };
 
@@ -239,8 +239,9 @@
   masonry();
   new ResizeObserver(masonry).observe(grid);
 
+  // Wait a frame so the tab script can reveal the Inspo panel before we measure cards.
   const deep = cards.find((c) => `#${c.item.id}` === location.hash);
-  if (deep) openViewer(deep);
+  if (deep) requestAnimationFrame(() => { masonry(); openViewer(deep); });
 
   document.getElementById('count').textContent = items.length;
 
